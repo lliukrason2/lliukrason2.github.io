@@ -1,54 +1,69 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!DOCTYPE html>
+<html>
 
-    <!-- mapbox scripts? -->
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.1.5/turf.min.js'></script>
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      
-    <!-- Your CSS files -->
-    <link rel="stylesheet" href="styles/styles.css">
-    
-    <!-- google fonts: Open Sans (sans) and Lora ) -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Darker+Grotesque:400,700&display=swap" rel="stylesheet">
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css" rel="stylesheet" />
+<head>
 
-    <title>Lede page</title>
-    <style>
-      ::-webkit-scrollbar {
-        width: 0px;
-        /* remove scrollbar space */
-        background: transparent;
-        /* optional: just make scrollbar invisible */
-      }
-  
-      .info {
-        padding: 6px 8px;
-        font-family: 'Darker Grotesque', sans-serif;
-        background: black;
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        border-radius: 5px;
-      }
+	<title>A Workaholic's Guide to Manhattan</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css?family=Darker+Grotesque:400,700&display=swap" rel="stylesheet">	<!-- 
+THESE ARE CALLS TO DIFFERENT EXTERNAL FILES
+MAPBOX HAS A JAVASCRIPT LIBRARY THAT YOU NEED
+THE NEXT IS A CSS FILE FOR THE MAP
+AND THE FINAL ONE IS THE LIBRARY FOR JQUERY, WHICH I USE FOR THE PULLDOWN MENU.
+ -->
 
-  #headPlace {
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        z-index: 10;
-  
-      padding: 10px;
-      width: 200px;
-        background-color: #DDDDDD;
-  
-      }
-      .legend {
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.1.5/turf.min.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<!-- 
+THESE ARE CSS STYLES WHAT YOU SHOULD FREELY PLAY WITH
+THE STYLES THAT BEGIN WITH # RELATE TO IDS, 
+THE ONES THAT BEGIN WITH . RELATE TO CLASSES
+WHEN YOU GOT EVERYTHING WORKING YOU CAN PLAY WITH THESE AND ADD TO THESE 
+TO MAKE YOUR FONTS AND LAYOUTS NICE AND LOVELY
+ -->
+
+	<style>
+		::-webkit-scrollbar {
+			width: 0px;
+			/* remove scrollbar space */
+			background: transparent;
+			/* optional: just make scrollbar invisible */
+		}
+
+		p { 
+			font-family: 'Darker Grotesque', sans-serif;
+			
+		}
+
+		.info {
+			padding: 6px 8px;
+			font-family: 'Darker Grotesque', sans-serif;
+			background: black;
+			background: rgba(255, 255, 255, 0.8);
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+			border-radius: 5px;
+		}
+
+		span {
+			font-weight: 700;
+		}
+
+		.info h4 {
+			margin: 0 0 5px;
+			color: #777;
+		}
+
+		#title {
+			font-size: 30px;
+			font-weight: bold;
+			margin: 0px;
+			color: #64ffda;
+		}
+
+		.legend {
 			text-align: left;
 			line-height: 18px;
 			color: #555;
@@ -61,33 +76,44 @@
 			margin-right: 8px;
 			opacity: 0.7;
 		}
-      #map,
-      #articlePlace {
-        font-family: 'Darker Grotesque', sans-serif;
-        flex: 1;
-        height: calc(100vh - 30px);
-        overflow: scroll;
-        margin: 15px;
-      }
-      
-  
-    </style>
-  </head>
 
-  <body class="light-theme"> <!-- all of the content on your html page goes inside the body -->
+		body {
+			display: flex;
+		}
 
-    <div class="header">
-      <h1 class="headline">A simple page</h1>
-      <h2 class="subhead">If you need a subhead, it can go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</h2>
-      <p class="byline">By Firstname Lastname</p>
-      <p class="date">Published Month XX, 2019</p>
-    </div>
+		#select-menu {
+			position: absolute;
+			left: 50px;
+			top: 10px;
+			z-index: 10;
+		}
+#headPlace {
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			z-index: 10;
 
-    <div class="story-body">
-      <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur purus sapien, tincidunt ac bibendum eget, cursus vel mi. Sed cursus tincidunt rutrum. Quisque auctor ut erat ut rhoncus. Nam vel neque mauris. Sed vel ex justo. Duis et sagittis dolor. In at auctor libero. Quisque at nisi quis elit tempus placerat.</p>
-      <p class="body-text">In ut egestas velit, non porta sapien. Nam quis magna luctus, fermentum nunc quis, ullamcorper neque. Morbi eget risus neque. Integer a tellus in lorem dapibus rutrum. Sed ut sapien libero. Cras rutrum semper aliquam. Donec in dignissim velit.</p>
-      <p class="body-text">Vivamus sagittis massa urna, nec condimentum enim tristique at. Mauris a erat quis diam pretium scelerisque a vel dolor. Etiam pulvinar laoreet gravida. Quisque consectetur, arcu non tempor pharetra, tortor massa rhoncus arcu, id vulputate tellus lectus ut elit.</p>
-    </div>
+		padding: 10px;
+		width: 200px;
+			background-color: #DDDDDD;
+
+		}
+		#map,
+		#articlePlace {
+			font-family: 'Darker Grotesque', sans-serif;
+			flex: 1;
+			height: calc(100vh - 30px);
+			overflow: scroll;
+			margin: 15px;
+		}
+		
+
+	</style>
+
+</head>
+<!-- THE BODY OF THE HTML BEGINS HERE -->
+
+<body>
 
 
 
@@ -311,41 +337,6 @@ ALL THE COMMENTS FROM HERE WE'LL BE IN JAVASCRIPT COMMENTS //
 	</script>
 
 
-    <div class="chart-section">
-      <p class="chart-title">Time for some graphics</p>
-      <p class="chart-subhead">Here's two charts side-by-side outside the story well.</p>
-      <div class="chart-row">
-        <div class="chart">
-          <img src="images/test-chart.png"/>
-        </div>
-
-        <div class="chart">
-          <img src="images/test-chart.png"/>
-        </div>
-      </div>
-      <p class="chart-source">Sources: One source; another source</p>
-    </div>
-
-    <div class="story-body">
-      <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur purus sapien, tincidunt ac bibendum eget, cursus vel mi. Sed cursus tincidunt rutrum. Quisque auctor ut erat ut rhoncus. Nam vel neque mauris. Sed vel ex justo. Duis et sagittis dolor. In at auctor libero. Quisque at nisi quis elit tempus placerat.</p>
-      <p class="body-text">In ut egestas velit, non porta sapien. Nam quis magna luctus, fermentum nunc quis, ullamcorper neque. Morbi eget risus neque. Integer a tellus in lorem dapibus rutrum. Sed ut sapien libero. Cras rutrum semper aliquam. Donec in dignissim velit.</p>
-
-      <div class="chart-section">
-        <p class="chart-title">Time for some graphics</p>
-        <p class="chart-subhead">This is a standard, single chart which fits in the same width as the story.</p>
-        <div class="chart-row">
-          <div class="chart">
-            <img src="images/test-chart.png"/>
-          </div>
-        </div>
-        <p class="chart-source">Sources: One source; another source</p>
-      </div>
-
-      
-    </div>
-
-
-
-  </body>
+</body>
 
 </html>
